@@ -8,9 +8,12 @@ public class InputManager : MonoBehaviour
     private AnimatorManager animatorManager;
     private float moveAmount;
     [SerializeField] private Vector2 movementInput;
+    [SerializeField] private Vector2 cameraInput;
         
     public float verticalInput;
     public float horizontalInput;
+    public float cameraInputX;
+    public float cameraInputY;
 
     private void Awake()
     {
@@ -21,7 +24,8 @@ public class InputManager : MonoBehaviour
         if (playercontrol == null)
         {
             playercontrol = new PlayerControl();
-            playercontrol.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>()  ;
+            playercontrol.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
+            playercontrol.PlayerMovement.Camera.performed += i => cameraInput = i.ReadValue<Vector2>();
         }
         playercontrol.Enable();
     }
@@ -39,6 +43,10 @@ public class InputManager : MonoBehaviour
     {
         verticalInput = movementInput.y;
         horizontalInput = movementInput.x;
+
+        cameraInputY = cameraInput.y;
+        cameraInputX = cameraInput.x;
+        
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
         animatorManager.UpdateAnimatorValues(0, moveAmount); 
     }
